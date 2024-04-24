@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Optional;
 
 import application.model.Livro;
 import application.repository.LivroRepository;
@@ -43,5 +46,17 @@ public class LivroController {
             livroRepo.save(livro);
 
             return "redirect:/livros/list";
-        } 
+        }
+        
+        @RequestMapping("/update/{id}")
+        public String update(Model ui, @PathVariable long id){
+            Optional<Livro> resultado = livroRepo.findById(id);
+
+            if(resultado.isPresent()){
+                ui.addAttribute("livro", resultado.get());
+                return "/livros/update";
+            }
+            
+            return "redirect:/livros/list";
+        }
 }
