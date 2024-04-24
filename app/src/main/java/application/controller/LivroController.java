@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import application.model.Livro;
 import application.repository.LivroRepository;
@@ -17,18 +19,29 @@ public class LivroController {
 
     @RequestMapping("/list")
     public String list(Model ui){
-        Livro[] livros = new Livro[2];
-        livros[0] = new Livro();
-        livros[0].setId(1);
-        livros[0].setTitulo("Livro Teste 1");
-        livros[0].setGenero("G1");
-        livros[1] = new Livro();
-        livros[1].setId(2);
-        livros[1].setTitulo("Livro Teste 2");
-        livros[1].setGenero("G2");
 
-        ui.addAttribute("Livros", livros);
+        ui.addAttribute("livros", livroRepo.findAll());
 
         return "/livros/list";
     }
+
+    @RequestMapping("/insert")
+    public String insert(){
+  
+        return "/livros/insert";
+    }
+
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public String insert(
+        @RequestParam("titulo") String titulo,
+        @RequestParam("genero") String genero) {
+
+            Livro livro = new Livro();
+            livro.setTitulo(titulo);
+            livro.setGenero(genero);
+
+            livroRepo.save(livro);
+
+            return "redirect:/livros/list";
+        } 
 }
