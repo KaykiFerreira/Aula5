@@ -10,7 +10,7 @@ import jakarta.persistence.Entity;
 @Entity
 @Table(name = "livro")
 
-public class livro {
+public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
